@@ -1,0 +1,6 @@
+include ':plugincore'
+include ':thirdapp'
+include ':secondapp'
+include ':mylibrary'
+include ':app'
+rootProject.name = "JSACtivity"

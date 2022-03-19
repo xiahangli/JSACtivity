@@ -1,5 +1,6 @@
 package com.example.jsactivity
 
+import com.example.jsactivity.pluginimpl.qspanel.dagger.SubModule
 import dagger.Component
 
 /**

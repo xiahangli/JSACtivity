@@ -6,4 +6,8 @@ package com.example.jsactivity;
  * @Email 2427417167@qq.com
  */
 public class SubModuleElement {
+
+
+    public SubModuleElement() {
+    }
 }

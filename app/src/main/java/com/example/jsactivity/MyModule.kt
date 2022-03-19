@@ -1,9 +1,8 @@
 package com.example.jsactivity
 
-import androidx.transition.Visibility
+import com.example.jsactivity.pluginimpl.qspanel.dagger.SubModule
 import dagger.Module
 import dagger.Provides
-import kotlin.reflect.KProperty
 
 /**
  * @author Henry

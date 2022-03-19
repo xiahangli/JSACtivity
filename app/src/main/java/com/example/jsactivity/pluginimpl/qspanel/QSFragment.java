@@ -25,9 +25,13 @@ public class QSFragment extends LifecycleFragment implements QS {
 
     private QSFragmentComponent.Factory mFactory;
 
+    // because we expose the QSFragmentComponent.Factory in ActivityComponent
+    // so we can use the QSFragmentComponent.Factory
     @Inject
     public QSFragment(QSFragmentComponent.Factory mFactory) {
         this.mFactory = mFactory;
+        Log.e("xia1", "QSFragment: factory " + mFactory);
+
     }
 
     @Override
@@ -49,5 +53,15 @@ public class QSFragment extends LifecycleFragment implements QS {
         // already.
         Log.e("xia", "onCreateView: container " + container);
         return inflater.inflate(R.layout.main_fragment, container, false);
+    }
+
+
+//    private final QSFragmentComponent.Factory mQsComponentFactory;
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+//        QSFragmentComponent qsFragmentComponent = mQsComponentFactory.create(this);
     }
 }

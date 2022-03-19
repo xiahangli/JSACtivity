@@ -1,4 +1,4 @@
-package com.example.jsactivity;
+package com.example.jsactivity.pluginimpl.qspanel.dagger;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,10 +11,12 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import java.lang.reflect.InvocationTargetException;
+import com.example.jsactivity.Outer;
+import com.example.jsactivity.SubModuleElement;
+import com.example.jsactivity.pluginimpl.qspanel.dagger.FragmentCreator;
+
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.function.LongUnaryOperator;
 
 import dagger.Module;
 import dagger.Provides;
@@ -25,8 +27,9 @@ import dalvik.system.DexClassLoader;
  * @Date 2022/3/17  2:58 AM
  * @Email 2427417167@qq.com
  */
-@Module
+@Module(subcomponents = FragmentCreator.class)
 public class SubModule {
+
 
 
     @Provides

@@ -16,11 +16,17 @@ import androidx.viewpager.widget.ViewPager;
 import com.demo.plugin.Plugin;
 import com.demo.plugin.QS;
 import com.example.jsactivity.R;
+import com.example.jsactivity.SubModuleElement;
+import com.example.jsactivity.pluginimpl.fragmentinviewpager.Fragment1;
 import com.example.jsactivity.pluginimpl.qspanel.QSFragment;
+import com.example.jsactivity.pluginimpl.qspanel.dagger.FragmentCreator;
+import com.example.jsactivity.pluginimpl.qspanel.dagger.QSFragmentComponent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
+import javax.inject.Inject;
 
 import dagger.Subcomponent;
 
@@ -32,9 +38,11 @@ import dagger.Subcomponent;
 public class MainActivity1 extends FragmentActivity {
 
     private static final String TAG_QS = "TAG_QS";
-    private Fragment mFragment;
+    private Fragment mFragment = new Fragment1();
     private Fragment mFragment2;
     private Fragment mFragment1;
+    @Inject
+    FragmentCreator.Builder mFragmentFactory;
 
     private ViewPager pager;
     private FragmentManager mSupportFragmentManager;
@@ -44,6 +52,16 @@ public class MainActivity1 extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        mFragment = new QSFragment();
+        ActivityComponent activityComponent = DaggerActivityComponent.create();
+        activityComponent.inject(this);
+        SubModuleElement subModuleElement = activityComponent.getSubModuleElement();
+        FragmentCreator.Builder fragmentCreate = activityComponent.getFragmentCreator();
+        FragmentCreator fragmentCreator = fragmentCreate.build();
+         activityComponent.getQSFragmentComponent();
+//        qsFragmentComponent
+
+        Log.e("xia1", "onCreate: sub " + subModuleElement + "\nfragmentCreator " +
+                fragmentCreate + "\nfragmentCreator " + fragmentCreator);
         mFragment1 = new Fragment(R.layout.fragment1);
         mFragment2 = new Fragment(R.layout.fragment2);
         mFragments[0] = mFragment1;
@@ -51,10 +69,9 @@ public class MainActivity1 extends FragmentActivity {
         setContentView(R.layout.activity_main);
         pager = findViewById(R.id.view_pager);
 
-        //TODO
-        addFragmentInstantiationProvider(fragmentCreatorFactory.build());
-
-
+        //TODO 放开下面两行
+//        Log.e("xia1", "onCreate: mFragmentFactory " + mFragmentFactory);
+        addFragmentInstantiationProvider(fragmentCreator);
         create(QSFragment.class);
 
 //        ExtensionFragmentListener.attachExtensonToFragment(container, QS.TAG, R.id.qs_frame,
@@ -62,7 +79,7 @@ public class MainActivity1 extends FragmentActivity {
 //                        .newExtension(QS.class)
 //                        .withPlugin(QS.class)
 //                        .withDefault(this::createDefaultQSFragment)
-//                        .build());
+//                        .fragmentCreator());
 
 
         /*pager.setAdapter(new PagerAdapter() {
@@ -128,7 +145,8 @@ public class MainActivity1 extends FragmentActivity {
 
         private Fragment instantiateWithInjections(
                 Context context, String className, Bundle args) {
-
+            //TODO 放开
+            FragmentInstantiationInfo fragmentInstantiationInfo = mInjectionMap.get(className);
             if (fragmentInstantiationInfo != null) {
                 try {
                     Fragment f = (Fragment) fragmentInstantiationInfo
@@ -156,30 +174,19 @@ public class MainActivity1 extends FragmentActivity {
         return mInjectionMap;
     }
 
-    /**
-     * The subcomponent of dagger that holds all fragments that need injection.
-     */
-    @Subcomponent
-    public interface FragmentCreator {
-        /** Factory for creating a FragmentCreator. */
-        @Subcomponent.Factory
-        interface Factory {
-            FragmentCreator build();
-        }
-        /**
-         * Inject a QSFragment.
-         */
-        QSFragment createQSFragment();
-    }
+
 
     /**
      * Adds a new Dagger component object that provides method(s) to create fragments via injection.
      */
     public void addFragmentInstantiationProvider(Object daggerComponent) {
+        Log.e("xia1", "addFragmentInstantiationProvider: ");
         for (Method method : daggerComponent.getClass().getDeclaredMethods()) {
+            Log.e("xia1", "addFragmentInstantiationProvider: " + method);
             if (Fragment.class.isAssignableFrom(method.getReturnType())
                     && (method.getModifiers() & Modifier.PUBLIC) != 0) {
                 String fragmentName = method.getReturnType().getName();
+                Log.e("xia1", "addFragmentInstantiationProvider: fragmentName " + fragmentName);
                 if (mInjectionMap.containsKey(fragmentName)) {
                     Log.e("xia1", "Fragment " + fragmentName + " is already provided by different"
                             + " Dagger component; Not adding method");

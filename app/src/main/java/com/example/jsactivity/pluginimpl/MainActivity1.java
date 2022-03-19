@@ -147,8 +147,14 @@ public class MainActivity1 extends FragmentActivity {
                 Context context, String className, Bundle args) {
             //TODO 放开
             FragmentInstantiationInfo fragmentInstantiationInfo = mInjectionMap.get(className);
+            //输出：public java.lang.String com.example.jsactivity.pluginimpl.DaggerActivityComponent$FragmentCreatorImpl.getString()
+            //我这边FragmentCreatorModule加了provideString,FragmentCreator加了String getString();
+//            FragmentInstantiationInfo fragmentInstantiationInfo1 = mInjectionMap.get(String.class.getName());
+//            Log.e("xia1", "instantiateWithInjections: args  " + args
+//                    + "\nfragmentInstantiationInfo1 " + fragmentInstantiationInfo1.mMethod); // args null
             if (fragmentInstantiationInfo != null) {
                 try {
+                    // TODO: 由于我们使用了带参数的Fragment，那么
                     Fragment f = (Fragment) fragmentInstantiationInfo
                             .mMethod
                             .invoke(fragmentInstantiationInfo.mDaggerComponent);
@@ -157,12 +163,16 @@ public class MainActivity1 extends FragmentActivity {
                         args.setClassLoader(f.getClass().getClassLoader());
                         f.setArguments(args);
                     }
+                    //QSFragment构造器，FragmentCreatorImpl.createQSFragment()；这两个方法
+                    Log.e("xia1", "instantiateWithInjections: \nfragmentInstantiationInfo.mMethod " +
+                            fragmentInstantiationInfo.mMethod + "\nfinal arg " + args);
                     return f;
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new Fragment.InstantiationException("Unable to instantiate " + className,
                             e);
                 }
             }
+//            Log.e("xia1", "instantiateWithInjections: final  " + args); // general don't reach
             return Fragment.instantiate(context, className, args);
         }
     }
@@ -180,11 +190,12 @@ public class MainActivity1 extends FragmentActivity {
      * Adds a new Dagger component object that provides method(s) to create fragments via injection.
      */
     public void addFragmentInstantiationProvider(Object daggerComponent) {
-        Log.e("xia1", "addFragmentInstantiationProvider: ");
         for (Method method : daggerComponent.getClass().getDeclaredMethods()) {
             Log.e("xia1", "addFragmentInstantiationProvider: " + method);
-            if (Fragment.class.isAssignableFrom(method.getReturnType())
-                    && (method.getModifiers() & Modifier.PUBLIC) != 0) {
+            if (
+//                    Fragment.class.isAssignableFrom(method.getReturnType())
+//                    &&
+                    (method.getModifiers() & Modifier.PUBLIC) != 0) {
                 String fragmentName = method.getReturnType().getName();
                 Log.e("xia1", "addFragmentInstantiationProvider: fragmentName " + fragmentName);
                 if (mInjectionMap.containsKey(fragmentName)) {

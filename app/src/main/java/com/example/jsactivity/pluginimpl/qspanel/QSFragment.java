@@ -27,6 +27,7 @@ public class QSFragment extends LifecycleFragment implements QS {
 
     // because we expose the QSFragmentComponent.Factory in ActivityComponent
     // so we can use the QSFragmentComponent.Factory
+    // 不能去掉@Inject，FragmentCreator中请求了QSFragment
     @Inject
     public QSFragment(QSFragmentComponent.Factory mFactory) {
         this.mFactory = mFactory;

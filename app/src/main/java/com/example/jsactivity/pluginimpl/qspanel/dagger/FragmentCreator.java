@@ -7,7 +7,8 @@ import dagger.Subcomponent;
 /**
  * The subcomponent of dagger that holds all fragments that need injection.
  */
-@Subcomponent
+//TODO 移除module ,只是为了测试加入
+@Subcomponent(modules = FragmentCreatorModule.class)
 public interface FragmentCreator {
     /**
      * Factory for creating a FragmentCreator.
@@ -15,9 +16,10 @@ public interface FragmentCreator {
     @Subcomponent.Builder
     interface Builder {
         FragmentCreator build();
-    }
 
-    // TODO 取消注释
+    }
+    String getString();
+
     /**
      * Inject a QSFragment.
      */

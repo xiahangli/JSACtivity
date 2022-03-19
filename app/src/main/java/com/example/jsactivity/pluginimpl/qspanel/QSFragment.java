@@ -51,17 +51,16 @@ public class QSFragment extends LifecycleFragment implements QS {
                              @Nullable Bundle savedInstanceState) {
         // attachToRoot can't be true, because the FragmentMangerImpl has added the returned view into container
         // already.
-        Log.e("xia", "onCreateView: container " + container);
+        Log.e("xia1", "onCreateView: container " + container);
         return inflater.inflate(R.layout.main_fragment, container, false);
     }
 
 
-//    private final QSFragmentComponent.Factory mQsComponentFactory;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-//        QSFragmentComponent qsFragmentComponent = mQsComponentFactory.create(this);
+        QSFragmentComponent qsFragmentComponent = mFactory.create(this);
+        Log.e("xia1", "onViewCreated: qsFragmentComponent " + qsFragmentComponent);
     }
 }

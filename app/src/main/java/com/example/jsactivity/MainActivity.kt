@@ -2,10 +2,12 @@ package com.example.jsactivity
 
 import android.os.*
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.jsactivity.pluginimpl.qspanel.dagger.SubModule
@@ -25,10 +27,19 @@ class MainActivity : AppCompatActivity() , com.example.mylibrary.Contract {
 
     private val REFRESH = 1;
     private val SLEEP = 2;
+    private var uivisibility :Int = 0
     private lateinit var inn: Inner;
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.decorView.fitsSystemWindows = true
+//        val dec = windorw.decorView
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+//        Log.e(TAG, "onCreate: ",  Exception())
         SubModule::javaClass
         val re = SubModule()
         re.doFunc(this);
@@ -42,7 +53,7 @@ class MainActivity : AppCompatActivity() , com.example.mylibrary.Contract {
 //        }
 //        re.doFunc()
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+//        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_main)
         iv = findViewById<ImageView>(R.id.iv)
         iv1 = findViewById<ImageView>(R.id.iv1)
@@ -73,7 +84,27 @@ val outer = Outer()
         /*var con :BiConsumer<File, ZipEntry>  = (BiConsumer<File, ZipEntry>
         { _, _-> TODO("Not yet implemented") }
                 )*/
+        window.decorView.setOnSystemUiVisibilityChangeListener {
+            Log.e(TAG, "onCreate: it $it  get " + window.decorView.systemUiVisibility)
 
+            var uiFlag:Int = it
+            if (it and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                Log.e(TAG, "onCreate:111 " )
+//                uiFlag = uiFlag or View.SYSTEM_UI_FLAG_FULLSCREEN
+            }
+            if (it and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION == 0) {
+                uiFlag = uiFlag or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                Log.e(TAG, "onCreate: it after1 $uiFlag" )
+            }
+            uiFlag = uiFlag or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            window.decorView.systemUiVisibility = uiFlag
+
+
+            /*uivisibility = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN)
+            Log.e(TAG, "onResume: $uivisibility"  )
+            window.decorView.systemUiVisibility = uivisibility*/
+        }
 
         val handlerThread = HandlerThread("bg")
         handlerThread.start()
@@ -154,6 +185,23 @@ val outer = Outer()
     private fun reload(sth :(String) -> Unit) {
         sth.invoke("test")
         sth("test2")
+    }
+
+    override fun onResume() {
+
+        super.onResume()
+//        window.statusBarColor = Color.parseColor("#7fff00ff")
+        uivisibility = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+//                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+        Log.e(TAG, "onResume: $uivisibility"  )
+        window.decorView.systemUiVisibility = uivisibility
+        var
+                findViewById: TextView = findViewById<TextView>(R.id.tv)
+        var
+                focusable = findViewById.isFocusable
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+//        window.decorView.windowInsetsController.apply {  }
     }
 }
 

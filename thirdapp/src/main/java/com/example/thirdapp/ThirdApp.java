@@ -28,11 +28,12 @@ public class ThirdApp extends AppCompatActivity {
         for (int i = 0; i < 3; i++) {
             FrameLayout viewGroup = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.sublayout,null, false);
             ImageView view = viewGroup.findViewById(R.id.iv);
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(200, 100);
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(100, 300);
             layoutParams.topMargin = 30;
+            layoutParams.leftMargin = 20;
             view.setLayoutParams(layoutParams);
             view.setBackgroundColor(0xff00ff00);
-            ((CustomLayout)findViewById(R.id.ll)).addView(viewGroup,view.getLayoutParams());
+            ((LinearLayout)findViewById(R.id.ll)).addView(viewGroup,view.getLayoutParams());
             cache.put(i, viewGroup);
         }
 
@@ -44,15 +45,15 @@ public class ThirdApp extends AppCompatActivity {
                 cache.forEach((key, value) -> {
                     ViewGroup viewGroup = (ViewGroup) value;
                     View child = viewGroup.getChildAt(0);
-                    ViewGroup.LayoutParams layoutParams = child.getLayoutParams();
-                    layoutParams.width = 100;
-                    layoutParams.height = 300;
+                    ViewGroup.LayoutParams childParams = child.getLayoutParams();
+                    childParams.width = 100;
+                    childParams.height = 100;
                     child.requestLayout();
-                    child.setLayoutParams(layoutParams);
+                    child.setLayoutParams(childParams);
                     Log.e("CustomLayout", "run: requestLayout key " + key + " value " + value);
                 });//,
 
-                CustomLayout customLayout = (CustomLayout) findViewById(R.id.ll);
+                LinearLayout customLayout = (LinearLayout) findViewById(R.id.ll);
 //                customLayout.postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {

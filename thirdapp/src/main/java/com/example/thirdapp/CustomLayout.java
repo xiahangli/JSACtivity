@@ -38,7 +38,7 @@ public class CustomLayout extends ViewGroup {
         for (int i = 0; i < childCount; i++) {
             View childAt = getChildAt(i);
             int width = MeasureSpec.makeMeasureSpec(300,MeasureSpec.EXACTLY);
-            int height = MeasureSpec.makeMeasureSpec(200,MeasureSpec.EXACTLY);
+            int height = MeasureSpec.makeMeasureSpec(350,MeasureSpec.EXACTLY);
             childAt.measure(width,  height);
 //            Log.e(TAG, "onMeasure: child at " + i + " width " + childAt.getMeasuredWidth());
             widthT += (MeasureSpec.getSize(width) +10);

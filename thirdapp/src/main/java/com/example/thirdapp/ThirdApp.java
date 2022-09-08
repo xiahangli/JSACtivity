@@ -33,7 +33,7 @@ public class ThirdApp extends AppCompatActivity {
             layoutParams.leftMargin = 20;
             view.setLayoutParams(layoutParams);
             view.setBackgroundColor(0xff00ff00);
-            ((LinearLayout)findViewById(R.id.ll)).addView(viewGroup,view.getLayoutParams());
+            ((CustomLayout)findViewById(R.id.ll)).addView(viewGroup,view.getLayoutParams());
             cache.put(i, viewGroup);
         }
 
@@ -53,7 +53,7 @@ public class ThirdApp extends AppCompatActivity {
                     Log.e("CustomLayout", "run: requestLayout key " + key + " value " + value);
                 });//,
 
-                LinearLayout customLayout = (LinearLayout) findViewById(R.id.ll);
+                CustomLayout customLayout = (CustomLayout) findViewById(R.id.ll);
 //                customLayout.postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {

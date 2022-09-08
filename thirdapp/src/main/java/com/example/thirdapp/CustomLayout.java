@@ -37,16 +37,16 @@ public class CustomLayout extends ViewGroup {
 //        Log.e(TAG, "onMeasure: mode " + mode);
         for (int i = 0; i < childCount; i++) {
             View childAt = getChildAt(i);
-            int width = MeasureSpec.makeMeasureSpec(100,MeasureSpec.EXACTLY);
+            int width = MeasureSpec.makeMeasureSpec(300,MeasureSpec.EXACTLY);
             int height = MeasureSpec.makeMeasureSpec(200,MeasureSpec.EXACTLY);
             childAt.measure(width,  height);
-            Log.e(TAG, "onMeasure: child at " + i + " width " + childAt.getMeasuredWidth());
+//            Log.e(TAG, "onMeasure: child at " + i + " width " + childAt.getMeasuredWidth());
             widthT += (MeasureSpec.getSize(width) +10);
             heightT +=(childAt.getMeasuredHeight() +10);
 
         }
         setMeasuredDimension(widthT,heightT);
-        Log.e(TAG, "onMeasure: width " + widthT);
+//        Log.e(TAG, "onMeasure: width " + widthT);
     }
 
 
@@ -61,13 +61,13 @@ public class CustomLayout extends ViewGroup {
             int childCount = getChildCount();
             int left=0;
 //            int top=t;
-            Log.e(TAG, "onLayout: left " + left);
+//            Log.e(TAG, "onLayout: left " + left);
             for (int i = 0; i < childCount; i++) {
                 View childAt = getChildAt(i);
                 childAt.layout(left,t,left+childAt.getMeasuredWidth(),t+childAt.getMeasuredHeight());
                 left+=childAt.getMeasuredWidth();
 //                top+=childAt.getMeasuredHeight();
-                Log.i(TAG, "onLayout: layout " + i +" left " + left );
+//                Log.i(TAG, "onLayout: layout " + i +" left " + left );
             }
         }
     }

@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.ArrayMap;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -24,12 +26,13 @@ public class ThirdApp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third_app);
         for (int i = 0; i < 3; i++) {
-            ImageView view = new ImageView(this);
-            ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(50, 50);
+            FrameLayout viewGroup = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.sublayout,null, false);
+            ImageView view = viewGroup.findViewById(R.id.iv);
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(50, 50);
             layoutParams.topMargin = 30;
             view.setLayoutParams(layoutParams);
             view.setBackgroundColor(0xff00ff00);
-            ((CustomLayout)findViewById(R.id.ll)).addView(view,view.getLayoutParams());
+            ((CustomLayout)findViewById(R.id.ll)).addView(viewGroup,view.getLayoutParams());
             cache.put(i, view);
         }
 
@@ -43,18 +46,31 @@ public class ThirdApp extends AppCompatActivity {
                     @Override
                     public void run() {
                         customLayout.removeAllViews();
+
                         for (int i = 0; i < 3; i++) {
+                            if (cache.get(i).getParent() != null){
+                                ((ViewGroup)cache.get(i).getParent()).removeView(cache.get(i));
+                            }
                             customLayout.addView(cache.get(i));
+
                         }
+
                     }
-                }, 1000);
+                }, 2000);
                 cache.forEach((key, value) -> {
                     ViewGroup.LayoutParams layoutParams = value.getLayoutParams();
-                    layoutParams.height = 200;
+                    layoutParams.height = 900;
                     layoutParams.width = 200;
                     value.requestLayout();
                     Log.e("CustomLayout", "run: requestLayout key " + key + " value " + value);
                 });
+//                cache.forEach((key, value) -> {
+//                    ViewGroup.LayoutParams layoutParams = value.getLayoutParams();
+//                    layoutParams.height = 400;
+//                    layoutParams.width = 200;
+//                    value.requestLayout();
+//                    Log.e("CustomLayout", "run: requestLayout key " + key + " value " + value);
+//                });
 
             }
         }, 1500);

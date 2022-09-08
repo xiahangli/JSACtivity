@@ -46,7 +46,7 @@ public class ThirdApp extends AppCompatActivity {
                     View child = viewGroup.getChildAt(0);
                     ViewGroup.LayoutParams layoutParams = child.getLayoutParams();
                     layoutParams.width = 100;
-                    layoutParams.height = 100;
+                    layoutParams.height = 300;
                     child.requestLayout();
                     child.setLayoutParams(layoutParams);
                     Log.e("CustomLayout", "run: requestLayout key " + key + " value " + value);
@@ -63,7 +63,6 @@ public class ThirdApp extends AppCompatActivity {
                             }
                             customLayout.addView(cache.get(i));
                             Log.e("CustomLayout", "add view");
-
                         }
 //                    }
 //                }, 1000);

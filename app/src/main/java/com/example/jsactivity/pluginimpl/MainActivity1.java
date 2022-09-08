@@ -38,7 +38,7 @@ import dagger.Subcomponent;
 public class MainActivity1 extends FragmentActivity {
 
     private static final String TAG_QS = "TAG_QS";
-    private Fragment mFragment = new Fragment1();
+    private Fragment mFragment;
     private Fragment mFragment2;
     private Fragment mFragment1;
     @Inject
@@ -51,7 +51,6 @@ public class MainActivity1 extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        mFragment = new QSFragment();
         ActivityComponent activityComponent = DaggerActivityComponent.create();
         activityComponent.inject(this);
         SubModuleElement subModuleElement = activityComponent.getSubModuleElement();
@@ -72,7 +71,39 @@ public class MainActivity1 extends FragmentActivity {
         //TODO 放开下面两行
 //        Log.e("xia1", "onCreate: mFragmentFactory " + mFragmentFactory);
         addFragmentInstantiationProvider(fragmentCreator);
-        create(QSFragment.class);
+        mFragment = create(QSFragment.class);
+        mSupportFragmentManager = getSupportFragmentManager();
+        mSupportFragmentManager.beginTransaction()
+                .replace(R.id.container, mFragment, TAG_QS)
+                .commitAllowingStateLoss();
+        /**
+         *
+         *
+         *   ExtensionFragmentListener.attachExtensonToFragment(container,
+         *   QS.TAG,
+         *   R.id.qs_frame,
+         *   mExtensionController.newExtension(QS.class)
+         *                        .withPlugin(QS.class)
+         *                         .withDefault(this::createDefaultQSFragment)
+         *                         .build()
+         *                         );
+         *
+         *  private ExtensionFragmentListener(View view,
+         *  String tag,
+         *  int id,
+         *  Extension<T> extension
+         *  ) {
+         *         mTag = tag;
+         *         mFragmentHostManager = FragmentHostManager.get(view);
+         *         mExtension = extension;
+         *         mId = id;
+         *         mFragmentHostManager.getFragmentManager().beginTransaction()
+         *                 .replace(id, (Fragment) mExtension.get(), mTag)
+         *                 .commit();
+         *         mExtension.clearItem(false);
+         *     }
+         */
+
 
 //        ExtensionFragmentListener.attachExtensonToFragment(container, QS.TAG, R.id.qs_frame,
 //                mExtensionController
@@ -93,7 +124,7 @@ public class MainActivity1 extends FragmentActivity {
                 return false;
             }
         });*/
-        mSupportFragmentManager = getSupportFragmentManager();
+
         pager.setAdapter(new FragmentPagerAdapter(mSupportFragmentManager) {
             @NonNull
             @Override
@@ -108,19 +139,11 @@ public class MainActivity1 extends FragmentActivity {
             }
         });
 
-        mSupportFragmentManager.beginTransaction()
-                .replace(R.id.container, mFragment, TAG_QS)
-                .commitAllowingStateLoss();
+
     }
 
     private final ExtensionFragmentManager mPlugins = new ExtensionFragmentManager();
 
-    /**
-     *
-     * @param fragmentCls
-     * @param <T>
-     * @return
-     */
     public <T> T create(Class<T> fragmentCls) {
         Log.e("xia1", "create: fragmentCls " + fragmentCls.getName());
         return (T) mPlugins.instantiate(this, fragmentCls.getName(), null);
@@ -145,7 +168,6 @@ public class MainActivity1 extends FragmentActivity {
 
         private Fragment instantiateWithInjections(
                 Context context, String className, Bundle args) {
-            //TODO 放开
             FragmentInstantiationInfo fragmentInstantiationInfo = mInjectionMap.get(className);
             //输出：public java.lang.String com.example.jsactivity.pluginimpl.DaggerActivityComponent$FragmentCreatorImpl.getString()
             //我这边FragmentCreatorModule加了provideString,FragmentCreator加了String getString();
@@ -158,6 +180,8 @@ public class MainActivity1 extends FragmentActivity {
                     Fragment f = (Fragment) fragmentInstantiationInfo
                             .mMethod
                             .invoke(fragmentInstantiationInfo.mDaggerComponent);
+                    Log.e("xia1", "instantiateWithInjections: args  " + args
+                    + "\nfragmentInstantiationInfo1 " + fragmentInstantiationInfo.mMethod); // args null
                     // Setup the args, taken from Fragment#instantiate.
                     if (args != null) {
                         args.setClassLoader(f.getClass().getClassLoader());

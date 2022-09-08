@@ -13,8 +13,10 @@ import androidx.annotation.RequiresApi;
 
 import com.example.jsactivity.Outer;
 import com.example.jsactivity.SubModuleElement;
+import com.example.jsactivity.classloader.CustomClassLoader;
 import com.example.jsactivity.pluginimpl.qspanel.dagger.FragmentCreator;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -108,6 +110,25 @@ public class SubModule {
             }
         }
 
+        CustomClassLoader classLoader = new CustomClassLoader(context.getApplicationInfo().sourceDir + "/");
+        Thread.currentThread().setContextClassLoader(classLoader);
+        Class<?> cls = null;
+        try {
+            cls = classLoader.findClass("com.example.jsactivity.classloader");
+            Object object = cls.newInstance();
+            Method method = cls.getDeclaredMethod("catched", new Class[]{null});
+            method.invoke(object, new Object[]{null});
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
 
 
     }

@@ -37,12 +37,12 @@ public class CustomLayout extends ViewGroup {
 //        Log.e(TAG, "onMeasure: mode " + mode);
         for (int i = 0; i < childCount; i++) {
             View childAt = getChildAt(i);
-            int width = MeasureSpec.makeMeasureSpec(300,MeasureSpec.EXACTLY);
-            int height = MeasureSpec.makeMeasureSpec(350,MeasureSpec.EXACTLY);
+            int width = MeasureSpec.makeMeasureSpec(200,MeasureSpec.EXACTLY);
+            int height = MeasureSpec.makeMeasureSpec(200,MeasureSpec.EXACTLY);
             childAt.measure(width,  height);
 //            Log.e(TAG, "onMeasure: child at " + i + " width " + childAt.getMeasuredWidth());
-            widthT += (MeasureSpec.getSize(width) +10);
-            heightT +=(childAt.getMeasuredHeight() +10);
+            widthT += (MeasureSpec.getSize(width) +0);
+            heightT +=(childAt.getMeasuredHeight() +0);
 
         }
         setMeasuredDimension(widthT,heightT);

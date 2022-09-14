@@ -33,7 +33,7 @@ public class ThirdApp extends AppCompatActivity {
             layoutParams.leftMargin = 20;
             view.setLayoutParams(layoutParams);
             view.setBackgroundColor(0xff00ff00);
-            ((CustomLayout)findViewById(R.id.ll)).addView(viewGroup,view.getLayoutParams());
+            ((ViewGroup)findViewById(R.id.ll)).addView(viewGroup,view.getLayoutParams());
             cache.put(i, viewGroup);
         }
 
@@ -46,25 +46,29 @@ public class ThirdApp extends AppCompatActivity {
                     ViewGroup viewGroup = (ViewGroup) value;
                     View child = viewGroup.getChildAt(0);
                     ViewGroup.LayoutParams childParams = child.getLayoutParams();
-                    childParams.width = 100;
-                    childParams.height = 100;
+                    childParams.width = 50;
+                    childParams.height = 50;
                     child.requestLayout();
                     child.setLayoutParams(childParams);
                     Log.e("CustomLayout", "run: requestLayout key " + key + " value " + value);
                 });//,
 
-                CustomLayout customLayout = (CustomLayout) findViewById(R.id.ll);
+                ViewGroup customLayout = (ViewGroup) findViewById(R.id.ll);
 //                customLayout.postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {
-                        customLayout.removeAllViews();
-                        for (int i = 0; i < 3; i++) {
-                            if (cache.get(i).getParent() != null){
-                                ((ViewGroup)cache.get(i).getParent()).removeView(cache.get(i));
-                            }
-                            customLayout.addView(cache.get(i));
-                            Log.e("CustomLayout", "add view");
-                        }
+
+
+//                        customLayout.removeAllViews();
+//                        for (int i = 0; i < 3; i++) {
+//                            if (cache.get(i).getParent() != null){
+//                                ((ViewGroup)cache.get(i).getParent()).removeView(cache.get(i));
+//                            }
+//                            customLayout.addView(cache.get(i));
+//                            Log.e("CustomLayout", "add view");
+//                        }
+
+
 //                    }
 //                }, 1000);
 //                customLayout.postDelayed(() ->

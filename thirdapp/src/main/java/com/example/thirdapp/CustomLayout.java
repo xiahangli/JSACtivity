@@ -1,6 +1,7 @@
 package com.example.thirdapp;
 
 import android.content.Context;
+import android.icu.util.Measure;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -34,18 +35,28 @@ public class CustomLayout extends ViewGroup {
         int widthT=0;
         int heightT=0;
         int mode = MeasureSpec.getMode(widthMeasureSpec);
-//        Log.e(TAG, "onMeasure: mode " + mode);
+        int size = MeasureSpec.getSize(widthMeasureSpec);
+
+        Log.e(TAG, "onMeasure: ws " + size);
         for (int i = 0; i < childCount; i++) {
             View childAt = getChildAt(i);
-            int width = MeasureSpec.makeMeasureSpec(200,MeasureSpec.EXACTLY);
-            int height = MeasureSpec.makeMeasureSpec(200,MeasureSpec.EXACTLY);
+            int width = MeasureSpec.makeMeasureSpec(300,MeasureSpec.EXACTLY);
+            int height = MeasureSpec.makeMeasureSpec(300,MeasureSpec.EXACTLY);
             childAt.measure(width,  height);
+            final int usedWidth =  0;
+            measureChildWithMargins(childAt,widthMeasureSpec/*parentWidthMeasureSPec*/,0/*widthUsed*/,
+                    heightMeasureSpec/*parentWidthMeasureSPec*/,0);
+            int measuredWidth = childAt.getMeasuredWidth();
 //            Log.e(TAG, "onMeasure: child at " + i + " width " + childAt.getMeasuredWidth());
-            widthT += (MeasureSpec.getSize(width) +0);
-            heightT +=(childAt.getMeasuredHeight() +0);
+            widthT += (MeasureSpec.getSize(width));
+            heightT +=(childAt.getMeasuredHeight());
 
         }
-        setMeasuredDimension(widthT,heightT);
+        // TODO xiahangli 去掉这个方法，为300，300像素，customlayout边界，而保留这个方法，customlayout边界为410，410，为我们设置的alyoutparams
+//        heightT = resolveSizeAndState(heightT, heightMeasureSpec, 0);
+//        widthT = resolveSizeAndState(widthT,widthMeasureSpec,0);
+        Log.e(TAG, "onMeasure: ws1 " +Integer.toHexString(heightT));
+        setMeasuredDimension(widthT, heightT);
 //        Log.e(TAG, "onMeasure: width " + widthT);
     }
 
@@ -57,9 +68,9 @@ public class CustomLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        if (changed) {
             int childCount = getChildCount();
             int left=0;
+//            if (changed) return;
 //            int top=t;
 //            Log.e(TAG, "onLayout: left " + left);
             for (int i = 0; i < childCount; i++) {
@@ -68,7 +79,6 @@ public class CustomLayout extends ViewGroup {
                 left+=childAt.getMeasuredWidth();
 //                top+=childAt.getMeasuredHeight();
 //                Log.i(TAG, "onLayout: layout " + i +" left " + left );
-            }
         }
     }
 

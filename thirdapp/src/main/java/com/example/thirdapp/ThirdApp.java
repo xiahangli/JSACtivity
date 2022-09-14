@@ -21,16 +21,24 @@ public class ThirdApp extends AppCompatActivity {
     ArrayMap<Integer, View> cache = new ArrayMap<>();
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third_app);
-        for (int i = 0; i < 3; i++) {
-            FrameLayout viewGroup = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.sublayout,null, false);
+        ViewGroup customLayout = (ViewGroup) findViewById(R.id.ll);
+        for (int i = 0; i < 1; i++) {
+            FrameLayout viewGroup = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.sublayout,
+                    customLayout, false);
             ImageView view = viewGroup.findViewById(R.id.iv);
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(100, 300);
-            layoutParams.topMargin = 30;
-            layoutParams.leftMargin = 20;
+            viewGroup.setClipChildren(true);
+            viewGroup.setClipToPadding(true);
+            ViewGroup.LayoutParams layoutParams1 = customLayout.getLayoutParams();
+            layoutParams1.width = 410;
+            layoutParams1.height = 410;
+            customLayout.setLayoutParams(layoutParams1);
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(300, 300);
+            view.setClipToOutline(false);
             view.setLayoutParams(layoutParams);
             view.setBackgroundColor(0xff00ff00);
             ((ViewGroup)findViewById(R.id.ll)).addView(viewGroup,view.getLayoutParams());
@@ -41,32 +49,41 @@ public class ThirdApp extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
-                Log.e("CustomLayout", "run: CacheSize " + cache.values().size());
-                cache.forEach((key, value) -> {
-                    ViewGroup viewGroup = (ViewGroup) value;
-                    View child = viewGroup.getChildAt(0);
-                    ViewGroup.LayoutParams childParams = child.getLayoutParams();
-                    childParams.width = 50;
-                    childParams.height = 50;
-                    child.requestLayout();
-                    child.setLayoutParams(childParams);
-                    Log.e("CustomLayout", "run: requestLayout key " + key + " value " + value);
-                });//,
+//                Log.e("CustomLayout", "run: CacheSize " + cache.values().size());
+//                cache.forEach((key, value) -> {
+//                    ViewGroup viewGroup = (ViewGroup) value;
+//                    View child = viewGroup.getChildAt(0);
+//                    ViewGroup.LayoutParams childParams = child.getLayoutParams();
+//                    childParams.width = 150;
+//                    childParams.height = 150;
+////                    child.requestLayout();
+//                    child.setLayoutParams(childParams);
+//                    Log.e("CustomLayout", "run: requestLayout key " + key + " value " + value);
+//                });//,
 
-                ViewGroup customLayout = (ViewGroup) findViewById(R.id.ll);
+
+        ViewGroup viewGroup = (ViewGroup) customLayout.getChildAt(0);
+        View child = viewGroup.getChildAt(0);
+        ViewGroup.LayoutParams lp = child.getLayoutParams();
+        lp.height = 20;
+        lp.width = 20;
+
+        child.requestLayout();
+        child.setLayoutParams(lp);
+
 //                customLayout.postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {
 
 
-//                        customLayout.removeAllViews();
-//                        for (int i = 0; i < 3; i++) {
-//                            if (cache.get(i).getParent() != null){
-//                                ((ViewGroup)cache.get(i).getParent()).removeView(cache.get(i));
-//                            }
-//                            customLayout.addView(cache.get(i));
-//                            Log.e("CustomLayout", "add view");
-//                        }
+                        customLayout.removeAllViews();
+                        for (int i = 0; i < 1; i++) {
+                            if (cache.get(i).getParent() != null){
+                                ((ViewGroup)cache.get(i).getParent()).removeView(cache.get(i));
+                            }
+                            customLayout.addView(cache.get(i));
+                            Log.e("CustomLayout", "add view");
+                        }
 
 
 //                    }
@@ -76,14 +93,7 @@ public class ThirdApp extends AppCompatActivity {
 //                10);
 
 //                customLayout.postDelayed(() -> {
-//                    ViewGroup viewGroup = (ViewGroup) customLayout.getChildAt(0);
-//                    View child = viewGroup.getChildAt(0);
-//                    ViewGroup.LayoutParams lp = child.getLayoutParams();
-//                    lp.height = 100;
-//                    lp.width = 100;
-//
-//                    child.requestLayout();
-//                    child.setLayoutParams(lp);
+
 //                    Log.e("CustomLayout", "run: chid " + child);
 //                },6000);
 
@@ -97,7 +107,7 @@ public class ThirdApp extends AppCompatActivity {
 //                });
 
             }
-        }, 1000);
+        }, 10000);
 
     }
 }

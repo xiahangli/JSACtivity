@@ -7,9 +7,9 @@
     tools:context=".ThirdApp">
 
     <com.example.thirdapp.CustomLayout
-        android:layout_width="600px"
+        android:layout_width="400px"
         android:id="@+id/ll"
-        android:layout_height="600px">
+        android:layout_height="400px">
 
     </com.example.thirdapp.CustomLayout>
 

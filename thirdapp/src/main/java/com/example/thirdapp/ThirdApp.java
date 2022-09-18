@@ -30,15 +30,17 @@ public class ThirdApp extends AppCompatActivity {
         for (int i = 0; i < 1; i++) {
             FrameLayout viewGroup = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.sublayout,
                     customLayout, false);
-            ImageView view = viewGroup.findViewById(R.id.iv);
             viewGroup.setClipChildren(true);
             viewGroup.setClipToPadding(true);
             ViewGroup.LayoutParams layoutParams1 = customLayout.getLayoutParams();
             layoutParams1.width = 410;
             layoutParams1.height = 410;
             customLayout.setLayoutParams(layoutParams1);
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(300, 300);
-            view.setClipToOutline(false);
+            // 图片背景
+            ImageView view = viewGroup.findViewById(R.id.iv);
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(410, 610);
+            view.setClipToOutline(true);
+//            view.setClipToPadding(true);
             view.setLayoutParams(layoutParams);
             view.setBackgroundColor(0xff00ff00);
             ((ViewGroup)findViewById(R.id.ll)).addView(viewGroup,view.getLayoutParams());

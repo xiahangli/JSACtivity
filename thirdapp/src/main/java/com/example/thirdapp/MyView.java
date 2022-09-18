@@ -10,8 +10,8 @@ import android.view.View;
  * @Email 2427417167@qq.com
  */
 public class MyView extends View {
-    public int viewWidth;
-    public int viewHeight;
+    public float viewWidth;
+    public float viewHeight;
     public int[] loc = new int[2];//loc[0]为第几行
     public int[] size = new int[2];//size[0]为行占有的数量
 

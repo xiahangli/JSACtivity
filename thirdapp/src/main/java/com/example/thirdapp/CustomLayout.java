@@ -23,25 +23,32 @@ public class CustomLayout extends ViewGroup {
     private final int MAX_COL = 4;
     private int[][] loc = new int[MAX_ROW][MAX_COL];
     private int[][] layoutLoc = new int[MAX_ROW][MAX_COL];
-    private final int minGridSize = 100;
+    public static final float sMinGridSize = 92.5f;
+    public static final int colSpacing = 10;
+    public static final int rowSpacing = 10;
 
     public CustomLayout(Context context) {
-        super(context);
+        this(context, null);
     }
 
     private static final String TAG = "CustomLayout";
 
     public CustomLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int widthDimen = 0;
         int heightDimen = 0;
-        int widthmode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthsize = MeasureSpec.getSize(widthMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        int availableWidth = widthSize - getPaddingLeft() - getPaddingRight();
+        int availableHeight = heightSize - getPaddingTop() - getPaddingBottom();
+
+
         int childCount = getChildCount();
         int childIndex = 0;
         boolean measureComplete = false;
@@ -56,7 +63,7 @@ public class CustomLayout extends ViewGroup {
          * ** *
          * ** *
          */
-        int lastMaxHeightDimen = 0;
+        float lastMaxHeightDimen = 0;
         for (int i = 0; i < MAX_ROW; i++) {//行
             if (measureComplete) {
                 break;
@@ -80,10 +87,14 @@ public class CustomLayout extends ViewGroup {
                         loc[childLeft + k][childTop + l] = 1;
                     }
                 }
-                child.measure(MeasureSpec.makeMeasureSpec(child.viewWidth, MeasureSpec.EXACTLY),
-                        MeasureSpec.makeMeasureSpec(child.viewHeight, MeasureSpec.EXACTLY));
+                child.measure(MeasureSpec.makeMeasureSpec((int) child.viewWidth, MeasureSpec.EXACTLY),
+                        MeasureSpec.makeMeasureSpec((int) child.viewHeight, MeasureSpec.EXACTLY));
                 tempWidthDimen += child.getMeasuredWidth();// 每一行都统计所有的item宽度和
-                lastMaxHeightDimen = Math.max(lastMaxHeightDimen, (i * minGridSize) + child.getMeasuredHeight());// 当前行的最大行高
+                if (j != 0) {
+                    tempWidthDimen += rowSpacing;//加上左边距
+                }
+                int currentRowMaxHeight = (int) ((i * (sMinGridSize+colSpacing)) + child.getMeasuredHeight());
+                lastMaxHeightDimen = Math.max(lastMaxHeightDimen,currentRowMaxHeight);// 当前行的最大行高
 
                 childIndex++;
                 if (childIndex >= childCount) {
@@ -93,7 +104,7 @@ public class CustomLayout extends ViewGroup {
             }
             widthDimen = Math.max(widthDimen, tempWidthDimen);// 取最大的行宽作为容器行宽
         }
-        heightDimen = lastMaxHeightDimen; // 高度取 max(当前行+当前行最大的child高度,上一次最大的高度)
+        heightDimen = (int) lastMaxHeightDimen; // 高度取 max(当前行+当前行最大的child高度,上一次最大的高度)
 
 //        for (int i = 0; i < getChildCount(); i++) {
 //
@@ -163,8 +174,8 @@ public class CustomLayout extends ViewGroup {
                         loc[childLeft + k][childTop + m] = 1;
                     }
                 }
-                left = child.loc[1] * minGridSize;
-                top = child.loc[0] * minGridSize;
+                left = (int) (child.loc[1] * sMinGridSize + j * colSpacing);
+                top = (int) (child.loc[0] * sMinGridSize + i * rowSpacing);
                 right = left + child.getMeasuredWidth();
                 bottom = top + child.getMeasuredHeight();
                 Log.e(TAG, "onLayout: layoutItem " + child
